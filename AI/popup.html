@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EnviroTrack</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 400px;
+      min-height: 500px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .stat-card.full {
+      grid-column: 1 / -1;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    
+    .stat-unit {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-left: 3px;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    
+    .comparison {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+    
+    .comparison-item {
+      margin-bottom: 8px;
+      padding-left: 15px;
+      position: relative;
+    }
+    
+    .comparison-item:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+    }
+    
+    .platform-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .platform-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    
+    .platform-name {
+      font-weight: 500;
+    }
+    
+    .platform-count {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+    
+    .button {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.8;
+    }
+    
+    .no-data {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.7;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🌍 EnviroTrack</h1>
+    <p>AI Environmental Impact Monitor</p>
+  </div>
+  
+  <div id="content">
+    <div class="loading">Loading statistics...</div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
