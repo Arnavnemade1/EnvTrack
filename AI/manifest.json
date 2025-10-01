@@ -9,14 +9,7 @@
     "tabs"
   ],
   "host_permissions": [
-    "*://*.openai.com/*",
-    "*://*.x.ai/*",
-    "*://*.anthropic.com/*",
-    "*://chat.openai.com/*",
-    "*://chatgpt.com/*",
-    "*://claude.ai/*",
-    "*://gemini.google.com/*",
-    "*://*.google.com/*"
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
