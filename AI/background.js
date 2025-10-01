@@ -6,6 +6,12 @@ const aiEstimates = {
     carbonIntensity: 0.435,
     waterPerKWh: 2
   },
+  'chatgpt.com': {
+    name: 'ChatGPT',
+    energyPerQuery: 0.000421,
+    carbonIntensity: 0.435,
+    waterPerKWh: 2
+  },
   'x.ai': {
     name: 'Grok',
     energyPerQuery: 0.0001,
@@ -13,6 +19,12 @@ const aiEstimates = {
     waterPerKWh: 2
   },
   'anthropic.com': {
+    name: 'Claude',
+    energyPerQuery: 0.0005,
+    carbonIntensity: 0.435,
+    waterPerKWh: 2
+  },
+  'claude.ai': {
     name: 'Claude',
     energyPerQuery: 0.0005,
     carbonIntensity: 0.435,
@@ -30,19 +42,34 @@ let pendingRequests = {};
 
 // Initialize stats on install
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ stats: {} });
+  chrome.storage.local.set({ stats: {}, debugLog: [] });
   console.log('EnviroTrack: Initialized');
 });
+
+// Add debug logging
+function addDebugLog(message) {
+  chrome.storage.local.get(['debugLog'], (result) => {
+    const log = result.debugLog || [];
+    log.push({ time: new Date().toISOString(), message });
+    if (log.length > 50) log.shift();
+    chrome.storage.local.set({ debugLog: log });
+  });
+}
 
 // Track request starts
 chrome.webRequest.onBeforeRequest.addListener(
   (details) => {
-    if (details.method === 'POST' && isAIAPI(details.url)) {
+    const url = details.url;
+    console.log('EnviroTrack: Checking request:', url);
+    addDebugLog('Request detected: ' + url);
+    
+    if (details.method === 'POST' && isAIAPI(url)) {
       pendingRequests[details.requestId] = {
         startTime: Date.now(),
-        url: details.url
+        url: url
       };
-      console.log('EnviroTrack: Request started', details.url);
+      console.log('EnviroTrack: AI Request started', url);
+      addDebugLog('AI Request TRACKED: ' + url);
     }
   },
   { urls: ["<all_urls>"] },
@@ -56,44 +83,92 @@ chrome.webRequest.onCompleted.addListener(
       const req = pendingRequests[details.requestId];
       const duration = Date.now() - req.startTime;
       const domain = getDomainFromUrl(req.url);
-      updateStats(domain, duration);
+      
       console.log('EnviroTrack: Request completed', domain, duration + 'ms');
+      addDebugLog('Completed: ' + domain + ' (' + duration + 'ms)');
+      
+      updateStats(domain, duration);
       delete pendingRequests[details.requestId];
     }
   },
   { urls: ["<all_urls>"] }
 );
 
-// Identify AI API endpoints
+// Track request errors
+chrome.webRequest.onErrorOccurred.addListener(
+  (details) => {
+    if (details.requestId in pendingRequests) {
+      const req = pendingRequests[details.requestId];
+      const duration = Date.now() - req.startTime;
+      const domain = getDomainFromUrl(req.url);
+      
+      console.log('EnviroTrack: Request error but still counting', domain);
+      addDebugLog('Error but counted: ' + domain);
+      
+      updateStats(domain, duration);
+      delete pendingRequests[details.requestId];
+    }
+  },
+  { urls: ["<all_urls>"] }
+);
+
+// Identify AI API endpoints - EXPANDED patterns
 function isAIAPI(url) {
-  return (
-    url.includes('chat.openai.com/backend-api') ||
-    url.includes('chatgpt.com/backend-api') ||
-    url.includes('api.openai.com') ||
-    url.includes('api.grok.x.ai') ||
-    url.includes('grok.x.ai') ||
-    url.includes('api.anthropic.com') ||
-    url.includes('claude.ai/api') ||
-    url.includes('generativelanguage.googleapis.com') ||
-    url.includes('gemini.google.com')
-  );
+  const patterns = [
+    // ChatGPT
+    'chat.openai.com/backend-api',
+    'chatgpt.com/backend-api',
+    'api.openai.com/v1/chat',
+    'chatgpt.com/public-api',
+    
+    // Grok
+    'api.grok.x.ai',
+    'grok.x.ai/api',
+    
+    // Claude
+    'api.anthropic.com',
+    'claude.ai/api',
+    'claude.ai/append_message',
+    
+    // Gemini
+    'generativelanguage.googleapis.com',
+    'gemini.google.com/api',
+    'aistudio.google.com/api'
+  ];
+  
+  return patterns.some(pattern => url.includes(pattern));
 }
 
 // Extract domain
 function getDomainFromUrl(url) {
   try {
     const u = new URL(url);
-    const parts = u.hostname.split('.');
+    const hostname = u.hostname;
+    
+    // Handle subdomains
+    if (hostname.includes('chatgpt.com')) return 'chatgpt.com';
+    if (hostname.includes('openai.com')) return 'openai.com';
+    if (hostname.includes('claude.ai')) return 'claude.ai';
+    if (hostname.includes('anthropic.com')) return 'anthropic.com';
+    if (hostname.includes('x.ai')) return 'x.ai';
+    if (hostname.includes('google.com')) return 'google.com';
+    
+    const parts = hostname.split('.');
     return parts.slice(-2).join('.');
   } catch (e) {
+    console.error('EnviroTrack: URL parse error', e);
     return 'unknown';
   }
 }
 
 // Update statistics
 function updateStats(domain, duration) {
+  console.log('EnviroTrack: Updating stats for', domain);
+  addDebugLog('Updating stats: ' + domain);
+  
   if (!(domain in aiEstimates)) {
-    console.log('EnviroTrack: Unknown domain', domain);
+    console.log('EnviroTrack: Unknown domain', domain, 'Available:', Object.keys(aiEstimates));
+    addDebugLog('Unknown domain: ' + domain);
     return;
   }
   
@@ -123,7 +198,18 @@ function updateStats(domain, duration) {
     stats[domain].water += water;
     
     chrome.storage.local.set({ stats }, () => {
-      console.log('EnviroTrack: Stats updated', stats[domain]);
+      console.log('EnviroTrack: Stats saved!', stats[domain]);
+      addDebugLog('Stats saved: ' + JSON.stringify(stats[domain]));
     });
   });
 }
+
+// Listen for messages from popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'getDebugLog') {
+    chrome.storage.local.get(['debugLog'], (result) => {
+      sendResponse({ log: result.debugLog || [] });
+    });
+    return true;
+  }
+});
