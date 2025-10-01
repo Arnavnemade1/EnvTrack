@@ -1,8 +1,10 @@
+let showDebug = false;
+
 document.addEventListener('DOMContentLoaded', () => {
   loadStats();
   
-  // Refresh every 3 seconds
-  setInterval(loadStats, 3000);
+  // Refresh every 2 seconds
+  setInterval(loadStats, 2000);
 });
 
 function loadStats() {
@@ -11,16 +13,7 @@ function loadStats() {
     const domains = Object.keys(stats);
     
     if (domains.length === 0) {
-      document.getElementById('content').innerHTML = `
-        <div class="no-data">
-          <div class="no-data-icon">🔍</div>
-          <div class="no-data-title">No Data Yet</div>
-          <div class="no-data-text">
-            Visit ChatGPT, Claude, Grok, or Gemini<br>
-            to start tracking your AI impact!
-          </div>
-        </div>
-      `;
+      showNoDataScreen();
       return;
     }
     
@@ -129,6 +122,8 @@ function loadStats() {
     html += `
       </div>
       <button class="button" id="resetBtn">Reset All Statistics</button>
+      <button class="button secondary" id="debugBtn">Show Debug Info</button>
+      <div id="debugSection"></div>
     `;
     
     document.getElementById('content').innerHTML = html;
@@ -136,8 +131,57 @@ function loadStats() {
     // Add reset handler
     document.getElementById('resetBtn').addEventListener('click', () => {
       if (confirm('Are you sure you want to reset all statistics?')) {
-        chrome.storage.local.set({ stats: {} }, loadStats);
+        chrome.storage.local.set({ stats: {}, debugLog: [] }, loadStats);
       }
     });
+    
+    // Add debug handler
+    document.getElementById('debugBtn').addEventListener('click', toggleDebug);
   });
+}
+
+function showNoDataScreen() {
+  let html = `
+    <div class="no-data">
+      <div class="no-data-icon">🔍</div>
+      <div class="no-data-title">No Data Yet</div>
+      <div class="no-data-text">
+        Visit ChatGPT, Claude, Grok, or Gemini<br>
+        and send a message to start tracking!
+      </div>
+      <button class="button secondary" id="debugBtn">Show Debug Info</button>
+      <div id="debugSection"></div>
+    </div>
+  `;
+  
+  document.getElementById('content').innerHTML = html;
+  document.getElementById('debugBtn').addEventListener('click', toggleDebug);
+}
+
+function toggleDebug() {
+  showDebug = !showDebug;
+  
+  if (showDebug) {
+    chrome.runtime.sendMessage({ action: 'getDebugLog' }, (response) => {
+      const log = response.log || [];
+      let debugHtml = `
+        <div class="debug-section">
+          <div class="debug-title">Debug Log (Last 50 events)</div>
+          <div class="debug-log">
+      `;
+      
+      if (log.length === 0) {
+        debugHtml += '<div>No requests detected yet. Try sending a message to an AI!</div>';
+      } else {
+        log.forEach(entry => {
+          debugHtml += `<div>${entry.time}: ${entry.message}</div>`;
+        });
+      }
+      
+      debugHtml += '</div></div>';
+      document.getElementById('debugSection').innerHTML = debugHtml;
+    });
+  } else {
+    document.getElementById('debugSection').innerHTML = '';
+  }
 }
