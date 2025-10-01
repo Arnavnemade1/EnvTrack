@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "EnviroTrack AI Monitor",
-  "version": "2.0.0",
-  "description": "Track environmental impact of your AI usage with beautiful insights",
+  "version": "2.1.0",
+  "description": "Track environmental impact of your AI usage with quantum-enhanced insights",
   "permissions": [
     "webRequest",
     "storage",
