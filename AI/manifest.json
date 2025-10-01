@@ -1,48 +1,26 @@
 {
   "manifest_version": 3,
-  "name": "EnviroTrack",
-  "version": "1.0.0",
-  "description": "Track your AI usage environmental impact",
+  "name": "EnviroTrack AI Monitor",
+  "version": "2.0.0",
+  "description": "Track environmental impact of your AI usage with beautiful insights",
   "permissions": [
+    "webRequest",
     "storage",
-    "tabs",
-    "alarms"
+    "tabs"
   ],
   "host_permissions": [
-    "https://chatgpt.com/*",
-    "https://claude.ai/*",
-    "https://gemini.google.com/*",
-    "https://chat.deepseek.com/*",
-    "https://copilot.microsoft.com/*",
-    "https://grok.com/*",
-    "https://poe.com/*",
-    "https://perplexity.ai/*",
-    "https://character.ai/*",
-    "https://huggingface.co/*",
-    "https://replicate.com/*"
+    "*://*.openai.com/*",
+    "*://*.x.ai/*",
+    "*://*.anthropic.com/*",
+    "*://chat.openai.com/*",
+    "*://chatgpt.com/*",
+    "*://claude.ai/*",
+    "*://gemini.google.com/*",
+    "*://*.google.com/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://chatgpt.com/*",
-        "https://claude.ai/*",
-        "https://gemini.google.com/*",
-        "https://chat.deepseek.com/*",
-        "https://copilot.microsoft.com/*",
-        "https://grok.com/*",
-        "https://poe.com/*",
-        "https://perplexity.ai/*",
-        "https://character.ai/*",
-        "https://huggingface.co/*",
-        "https://replicate.com/*"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_start"
-    }
-  ],
   "action": {
     "default_popup": "popup.html"
   }
