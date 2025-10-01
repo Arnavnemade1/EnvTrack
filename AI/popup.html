@@ -11,9 +11,9 @@
     }
     
     body {
-      width: 450px;
+      width: 480px;
       min-height: 600px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
       color: white;
       overflow-x: hidden;
@@ -25,35 +25,93 @@
     
     .header {
       text-align: center;
-      margin-bottom: 28px;
-      animation: fadeInDown 0.6s ease-out;
+      margin-bottom: 24px;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
     }
     
     .logo {
-      font-size: 48px;
-      margin-bottom: 8px;
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
     }
     
     .header h1 {
       font-size: 28px;
       font-weight: 700;
-      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+      background: linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #8b5cf6 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     
     .header p {
-      font-size: 13px;
+      font-size: 12px;
       color: #94a3b8;
       font-weight: 500;
+    }
+    
+    .quantum-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      color: #60a5fa;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+    
+    .ibm-badge {
+      font-size: 9px;
+      color: #94a3b8;
+      margin-top: 6px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    
+    .summary-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .summary-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #10b981;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .summary-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+    
+    .summary-highlight {
+      color: #10b981;
+      font-weight: 600;
     }
     
     .stats-overview {
@@ -61,7 +119,6 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       margin-bottom: 24px;
-      animation: fadeInUp 0.6s ease-out 0.1s both;
     }
     
     .stat-card {
@@ -82,20 +139,31 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.5), transparent);
+      background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.5), transparent);
     }
     
     .stat-card:hover {
       transform: translateY(-4px);
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(96, 165, 250, 0.3);
-      box-shadow: 0 8px 32px rgba(96, 165, 250, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
     }
     
     .stat-icon {
-      font-size: 24px;
-      margin-bottom: 8px;
-      display: block;
+      width: 40px;
+      height: 40px;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .stat-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: #10b981;
     }
     
     .stat-label {
@@ -121,10 +189,6 @@
       margin-left: 4px;
     }
     
-    .platforms-section {
-      animation: fadeInUp 0.6s ease-out 0.2s both;
-    }
-    
     .section-title {
       font-size: 14px;
       font-weight: 700;
@@ -141,7 +205,7 @@
       content: '';
       width: 3px;
       height: 14px;
-      background: linear-gradient(180deg, #60a5fa, #a78bfa);
+      background: linear-gradient(180deg, #10b981, #3b82f6);
       border-radius: 2px;
     }
     
@@ -157,7 +221,7 @@
     
     .platform-card:hover {
       background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(167, 139, 250, 0.3);
+      border-color: rgba(16, 185, 129, 0.3);
       transform: translateX(4px);
     }
     
@@ -175,8 +239,8 @@
     }
     
     .platform-queries {
-      background: rgba(96, 165, 250, 0.2);
-      color: #60a5fa;
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
       padding: 4px 12px;
       border-radius: 20px;
       font-size: 12px;
@@ -210,12 +274,11 @@
     }
     
     .impact-section {
-      background: linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
-      border: 1px solid rgba(167, 139, 250, 0.2);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
       border-radius: 16px;
       padding: 20px;
       margin: 24px 0;
-      animation: fadeInUp 0.6s ease-out 0.3s both;
     }
     
     .impact-title {
@@ -236,10 +299,21 @@
       text-align: center;
     }
     
-    .impact-emoji {
-      font-size: 32px;
-      display: block;
-      margin-bottom: 8px;
+    .impact-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 8px;
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .impact-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: #a78bfa;
     }
     
     .impact-value {
@@ -270,17 +344,12 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
-      animation: fadeInUp 0.6s ease-out 0.4s both;
       margin-top: 12px;
     }
     
     .button:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 24px rgba(239, 68, 68, 0.4);
-    }
-    
-    .button:active {
-      transform: translateY(0);
     }
     
     .button.secondary {
@@ -295,13 +364,23 @@
     .no-data {
       text-align: center;
       padding: 40px 20px;
-      animation: fadeIn 0.6s ease-out;
     }
     
     .no-data-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-      opacity: 0.5;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      background: rgba(16, 185, 129, 0.15);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .no-data-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: #10b981;
     }
     
     .no-data-title {
@@ -338,7 +417,7 @@
     
     .debug-log {
       font-size: 11px;
-      font-family: monospace;
+      font-family: 'IBM Plex Mono', monospace;
       color: #cbd5e1;
       line-height: 1.6;
     }
@@ -349,41 +428,30 @@
       background: rgba(0, 0, 0, 0.2);
       border-radius: 4px;
     }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">🌍</div>
+      <div class="logo-container">
+        <div class="logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+      </div>
       <h1>EnviroTrack</h1>
       <p>AI Environmental Impact Monitor</p>
+      <div class="quantum-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        Powered by EnviroCast Quantum Algorithm
+      </div>
+      <div class="ibm-badge">Quantum computing inspired by IBM® AER circuits</div>
     </div>
     
     <div id="content"></div>
